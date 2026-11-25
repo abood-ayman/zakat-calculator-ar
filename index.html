@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>حاسبة الزكاة | أداة مجانية</title>
+<meta name="description" content="احسب زكاة مالك: نقد وذهب وفضة، مع مقارنة تلقائية بالنصاب. تعمل على جهازك دون إرسال أي بيانات.">
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:Tahoma,'Segoe UI',Arial,sans-serif;background:#f1f5f9;color:#1e293b;line-height:1.7;min-height:100vh;display:flex;flex-direction:column}
+header{background:linear-gradient(135deg,#0f766e,#14b8a6);color:#fff;padding:1.6rem 1rem;text-align:center}
+header h1{font-size:1.5rem}
+.tagline{opacity:.92;font-size:.95rem;margin-top:.25rem}
+main{flex:1;width:100%;max-width:560px;margin:0 auto;padding:1rem}
+.card{background:#fff;border-radius:14px;padding:1.25rem;box-shadow:0 1px 4px rgba(15,23,42,.08);margin-bottom:1rem}
+.card h2{font-size:1.1rem;margin-bottom:.4rem;color:#0f766e}
+label{display:block;font-weight:700;margin:.75rem 0 .3rem}
+input,select,textarea{width:100%;padding:.7rem .8rem;border:1.5px solid #cbd5e1;border-radius:10px;font-size:1rem;font-family:inherit;background:#fff;color:#1e293b}
+input:focus,select:focus,textarea:focus{outline:none;border-color:#0f766e;box-shadow:0 0 0 3px rgba(20,184,166,.18)}
+.row{display:flex;gap:.6rem}
+.row>*{flex:1;min-width:0}
+button{display:inline-block;width:100%;padding:.8rem;border:0;border-radius:10px;background:#0f766e;color:#fff;font-size:1.05rem;font-weight:700;cursor:pointer;font-family:inherit;margin-top:1rem}
+button:hover{background:#115e59}
+button.ghost{background:#e2e8f0;color:#1e293b}
+.result{background:#ecfdf5;border:1.5px solid #6ee7b7;border-radius:10px;padding:1rem;margin-top:1rem;font-size:1.05rem;word-break:break-word}
+.result b{color:#047857}
+.result.warn{background:#fffbeb;border-color:#fcd34d}
+.result.warn b{color:#b45309}
+.result.bad{background:#fef2f2;border-color:#fca5a5}
+.result.bad b{color:#b91c1c}
+.muted{color:#64748b;font-size:.85rem}
+footer{background:#0f172a;color:#94a3b8;text-align:center;padding:1.2rem 1rem;font-size:.85rem;line-height:1.9}
+footer a{color:#5eead4}
+table{width:100%;border-collapse:collapse;margin-top:.5rem}
+th,td{padding:.5rem;border-bottom:1px solid #e2e8f0;text-align:right;font-size:.95rem}
+.big{font-size:1.6rem;font-weight:800}
+.hidden{display:none}
+.chk{display:flex;align-items:center;gap:.5rem;margin:.3rem 0}
+.chk input{width:auto}
+
+</style>
+</head>
+<body>
+<header>
+<h1>حاسبة الزكاة</h1>
+<p class="tagline">احسب زكاة مالك (نقد، ذهب، فضة) وقارن بالنصاب في ثوانٍ</p>
+</header>
+<main>
+<div class="card">
+<h2>أموالك</h2>
+<label for="cash">النقد المتاح (جنيه)</label>
+<input type="number" inputmode="decimal" id="cash" min="0" placeholder="مثال: 100000">
+<div class="row">
+<div>
+<label for="goldG">جرامات الذهب</label>
+<input type="number" inputmode="decimal" id="goldG" min="0" placeholder="0">
+</div>
+<div>
+<label for="goldP">سعر جرام الذهب عيار ٢٤</label>
+<input type="number" inputmode="decimal" id="goldP" min="0" value="4000">
+</div>
+</div>
+<div class="row">
+<div>
+<label for="silverG">جرامات الفضة</label>
+<input type="number" inputmode="decimal" id="silverG" min="0" placeholder="0">
+</div>
+<div>
+<label for="silverP">سعر جرام الفضة</label>
+<input type="number" inputmode="decimal" id="silverP" min="0" value="50">
+</div>
+</div>
+<label for="debts">ديون مستحقة عليك تُخصم من المال (جنيه)</label>
+<input type="number" inputmode="decimal" id="debts" min="0" placeholder="0">
+<button onclick="calc()">احسب الزكاة</button>
+</div>
+<div id="out" class="result hidden"></div>
+<p class="muted" style="text-align:center">النتيجة إرشادية؛ لأحكام الأسهم والتجارة والزرع راجع دار الإفتاء أو أهل العلم.</p>
+
+</main>
+<footer>
+<p>تعمل هذه الأداة بالكامل على جهازك، ولا تُحفظ أو تُرسل أي بيانات إلى أي خادم.</p>
+<p>أداة مجانية مفتوحة المصدر · بُنيت بمساعدة أدوات ذكاء اصطناعي · <a href="https://github.com/abood-ayman/zakat-calculator-ar">الكود على GitHub</a></p>
+</footer>
+<script>
+window.__jserrors=[];window.addEventListener('error',function(e){window.__jserrors.push(String(e.message))});
+const g = id => document.getElementById(id);
+const num = id => { const v = parseFloat(g(id).value); return isNaN(v) ? 0 : v; };
+const fmt = x => x.toLocaleString('ar-EG', { maximumFractionDigits: 2 }) + ' جنيه';
+
+function zakat(o) {
+  const total = Math.max(0, o.cash + o.goldG * o.goldP + o.silverG * o.silverP - o.debts);
+  const nisab = 85 * o.goldP;
+  const eligible = nisab > 0 && total >= nisab;
+  return { total, nisab, eligible, due: eligible ? total * 0.025 : 0 };
+}
+
+function calc() {
+  const r = zakat({ cash: num('cash'), goldG: num('goldG'), goldP: num('goldP'), silverG: num('silverG'), silverP: num('silverP'), debts: num('debts') });
+  const el = g('out');
+  el.classList.remove('hidden', 'warn');
+  let h = '<p>إجمالي المال بعد خصم الديون: <b>' + fmt(r.total) + '</b></p>' +
+          '<p>النصاب (٨٥ جرام ذهب): <b>' + fmt(r.nisab) + '</b></p>';
+  if (!r.eligible) {
+    el.classList.add('warn');
+    h += '<p><b>مالك لم يبلغ النصاب، فلا زكاة فيه.</b></p>';
+  } else {
+    h += '<p class="big">الزكاة المستحقة (٢.٥٪): <b>' + fmt(r.due) + '</b></p>';
+  }
+  h += '<p class="muted">تجب الزكاة إذا بلغ المال النصاب وحال عليه الحول (مرت عليه سنة هجرية كاملة).</p>';
+  el.innerHTML = h;
+}
+
+window.__test = function () {
+  const a = zakat({ cash: 1000000, goldG: 0, goldP: 4000, silverG: 0, silverP: 0, debts: 0 });
+  const b = zakat({ cash: 100000, goldG: 0, goldP: 4000, silverG: 0, silverP: 0, debts: 0 });
+  const c = zakat({ cash: 500000, goldG: 0, goldP: 4000, silverG: 0, silverP: 0, debts: 200000 });
+  const ok = a.nisab === 340000 && Math.abs(a.due - 25000) < 0.01 && a.eligible &&
+             !b.eligible && b.due === 0 &&
+             c.total === 300000 && !c.eligible;
+  return { pass: ok, details: { a, b, c } };
+};
+
+window.__demo = function () {
+  g('cash').value = 500000; g('goldG').value = 10; g('goldP').value = 4000; g('debts').value = 5000;
+  calc();
+};
+
+</script>
+</body>
+</html>
