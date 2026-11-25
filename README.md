@@ -1,28 +1,30 @@
-# حاسبة الزكاة
+# Zakat Calculator | حاسبة الزكاة
 
-احسب زكاة مالك (نقد، ذهب، فضة) وقارن بالنصاب في ثوانٍ
+Calculate zakat on cash, gold and silver, with an automatic nisab check. Arabic interface.
 
-**رابط الأداة (تعمل فورًا من المتصفح):** https://abood-ayman.github.io/zakat-calculator-ar/
+**Live app:** https://abood-ayman.github.io/zakat-calculator-ar/
 
-## ما الذي تقدمه؟
+![Zakat Calculator, mobile view](docs/screenshot.svg)
 
-- حساب إجمالي المال بعد خصم الديون المستحقة
-- مقارنة تلقائية بالنصاب (٨٥ جرام ذهب بسعر تدخله أنت)
-- مقدار الزكاة المستحقة (٢.٥٪) عند بلوغ النصاب
-- الأسعار قابلة للتعديل لتطابق السوق الحالي
+This is a personal project, built with AI tools.
 
-## الخصوصية
+## Features
+- Total wealth after deducting due debts
+- Automatic nisab comparison (85 g of gold at a price you enter)
+- Zakat due (2.5%) once the nisab is reached
+- Prices are editable to match the current market
 
-تعمل الأداة بالكامل داخل متصفحك (HTML/CSS/JavaScript فقط). لا يوجد خادم، ولا حسابات، ولا تتبّع، ولا تُرسل أو تُحفظ أي بيانات تدخلها خارج جهازك.
+## Note
+Guidance only: for a ruling on your specific case, consult a scholar.
 
-## التقنية
+## Privacy
+Everything runs in your browser. No data is stored or sent anywhere.
 
-صفحة ثابتة واحدة بلا أي مكتبات خارجية، تعمل على الهاتف والحاسوب، وتُستضاف مجانًا عبر GitHub Pages.
+## Run locally
+Open `index.html` in any browser. It is a single static page with no dependencies.
 
-## ملاحظة شفافية
+## Status
+Stable.
 
-بُنيت هذه الأداة بمساعدة أدوات ذكاء اصطناعي، ورُوعيَت بساطتها وفائدتها المباشرة.
-
-## الرخصة
-
-MIT — انظر ملف LICENSE.
+## Copyright
+MIT License - Copyright (c) 2026 Abdullah Ayman.
