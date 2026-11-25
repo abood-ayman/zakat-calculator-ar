@@ -4,6 +4,8 @@ Calculate zakat on cash, gold and silver, with an automatic nisab check. Arabic 
 
 **Live app:** https://abood-ayman.github.io/zakat-calculator-ar/
 
+**LinkedIn:** [Project entry](https://www.linkedin.com/in/abdullah-ayman-1678b737b/details/projects/)
+
 ![Zakat Calculator, mobile view](docs/screenshot.svg)
 
 This is a personal project, built with AI tools.
